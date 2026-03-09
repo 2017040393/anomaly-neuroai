@@ -44,8 +44,21 @@ def _append_metrics(metrics_path: Path, row: dict[str, Any]) -> None:
 
 def _autocast_context(device: torch.device, enabled: bool):
     if enabled and device.type == "cuda":
-        return torch.amp.autocast()
+        try:
+            return torch.amp.autocast(device_type=device.type, enabled=True)
+        except (AttributeError, TypeError):
+            return torch.cuda.amp.autocast(enabled=True)
     return nullcontext()
+
+
+def _build_grad_scaler(enabled: bool):
+    try:
+        return torch.amp.GradScaler(device="cuda", enabled=enabled)
+    except (AttributeError, TypeError):
+        try:
+            return torch.amp.GradScaler("cuda", enabled=enabled)
+        except (AttributeError, TypeError):
+            return torch.cuda.amp.GradScaler(enabled=enabled)
 
 
 def train_one_epoch(
@@ -54,7 +67,7 @@ def train_one_epoch(
     criterion: nn.Module,
     optimizer: torch.optim.Optimizer,
     device: torch.device,
-    scaler: torch.cuda.amp.GradScaler,
+    scaler,
     use_amp: bool,
 ) -> tuple[float, float]:
     model.train()
@@ -144,7 +157,7 @@ def main() -> None:
     criterion = nn.CrossEntropyLoss()
     optimizer = Adam(model.parameters(), lr=float(cfg["train"]["lr"]))
     amp_enabled = bool(cfg["train"].get("use_amp", False)) and device.type == "cuda"
-    scaler = torch.amp.GradScaler(enabled=amp_enabled)
+    scaler = _build_grad_scaler(enabled=amp_enabled)
 
     experiment_name = str(cfg["experiment_name"])
     run_dir = Path(cfg.get("output_dir", "results/runs")) / experiment_name
