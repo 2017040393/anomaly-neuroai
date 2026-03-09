@@ -1,0 +1,26 @@
+seed: 42
+device: cuda
+experiment_name: local_train_mlp
+output_dir: results/runs
+
+data:
+  num_features: 16
+  num_classes: 3
+  train_size: 2048
+  val_size: 512
+
+model:
+  name: mlp
+  hidden_dim: 64
+  time_steps: 6
+
+train:
+  batch_size: 64
+  epochs: 15
+  lr: 0.001
+  num_workers: 0
+  use_amp: false
+
+save:
+  checkpoint_dir: checkpoints/local
+  save_best: true

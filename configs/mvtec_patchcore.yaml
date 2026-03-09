@@ -1,0 +1,55 @@
+seed: 42
+device: cuda
+experiment_name: mvtec_patchcore_bottle
+output_dir: results/runs
+
+data:
+  dataset_name: mvtec_ad
+  root_dir: data/raw/mvtec_ad
+  category: bottle
+  train_split: train
+  test_split: test
+  mask_dir_name: ground_truth
+  image_size: 256
+  center_crop: 224
+  normalization: imagenet
+
+model:
+  name: patchcore
+  backbone: wide_resnet50_2
+  feature_layers:
+    - layer2
+    - layer3
+  pretrained: true
+  patch_stride: 1
+  coreset_sampling_ratio: 0.1
+  num_neighbors: 9
+  gaussian_sigma: 4.0
+
+train:
+  batch_size: 16
+  epochs: 1
+  num_workers: 4
+  use_amp: true
+  cache_embeddings: false
+
+inference:
+  batch_size: 8
+  image_threshold: null
+  pixel_threshold: null
+  save_maps: true
+  save_overlay: true
+
+metrics:
+  compute_image_auroc: true
+  compute_pixel_auroc: true
+
+save:
+  checkpoint_dir: checkpoints/cloud/mvtec_patchcore
+  prediction_dir: results/runs/mvtec_patchcore_bottle/predictions
+  visualization_dir: results/runs/mvtec_patchcore_bottle/visualizations
+  save_best: true
+
+benchmark:
+  warmup_runs: 10
+  timed_runs: 50

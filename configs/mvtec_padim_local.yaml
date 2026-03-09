@@ -1,0 +1,57 @@
+seed: 42
+device: cuda
+experiment_name: mvtec_padim_bottle_local
+output_dir: results/runs
+
+data:
+  dataset_name: mvtec_ad
+  root_dir: data/raw/mvtec_ad
+  category: bottle
+  train_split: train
+  test_split: test
+  mask_dir_name: ground_truth
+  image_size: 256
+  center_crop: 224
+  normalization: imagenet
+  limit_train_samples: 32
+  limit_test_samples: 32
+
+model:
+  name: padim
+  backbone: resnet18
+  feature_layers:
+    - layer1
+    - layer2
+    - layer3
+  pretrained: true
+  embedding_dim: 448
+  reduced_dim: 64
+  gaussian_sigma: 4.0
+
+train:
+  batch_size: 4
+  epochs: 1
+  num_workers: 0
+  use_amp: false
+  cache_embeddings: false
+
+inference:
+  batch_size: 2
+  image_threshold: null
+  pixel_threshold: null
+  save_maps: true
+  save_overlay: true
+
+metrics:
+  compute_image_auroc: true
+  compute_pixel_auroc: true
+
+save:
+  checkpoint_dir: checkpoints/local/mvtec_padim
+  prediction_dir: results/runs/mvtec_padim_bottle_local/predictions
+  visualization_dir: results/runs/mvtec_padim_bottle_local/visualizations
+  save_best: true
+
+benchmark:
+  warmup_runs: 3
+  timed_runs: 10
