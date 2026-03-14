@@ -64,7 +64,7 @@ class PaDiMWrapper(nn.Module):
         self.feature_map_size: tuple[int, int] | None = None
 
     @classmethod
-    def from_config(cls, cfg: dict[str, Any]) -> "PaDiMWrapper":
+    def from_config(cls, cfg: dict[str, Any]):
         model_cfg = cfg["model"]
         return cls(
             backbone=str(model_cfg.get("backbone", "resnet18")),

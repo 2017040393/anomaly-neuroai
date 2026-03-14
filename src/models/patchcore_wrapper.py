@@ -110,7 +110,7 @@ class PatchCoreWrapper(nn.Module):
         self.memory_bank: torch.Tensor | None = None
 
     @classmethod
-    def from_config(cls, cfg: dict[str, Any]) -> "PatchCoreWrapper":
+    def from_config(cls, cfg: dict[str, Any]):
         model_cfg = cfg["model"]
         return cls(
             backbone=str(model_cfg.get("backbone", "wide_resnet50_2")),
@@ -180,9 +180,7 @@ class PatchCoreWrapper(nn.Module):
     def _project_embeddings(self, embeddings: torch.Tensor) -> torch.Tensor:
         embeddings_cpu = embeddings.detach().cpu()
         if embeddings_cpu.ndim != 2:
-            raise ValueError(
-                f"embeddings must have shape [N, C], got {tuple(embeddings_cpu.shape)}."
-            )
+            raise ValueError(f"embeddings must have shape [N, C], got {tuple(embeddings_cpu.shape)}.")
 
         num_samples, num_features = embeddings_cpu.shape
         if num_samples <= 1 or num_features <= self.projection_dim:
@@ -358,7 +356,7 @@ class PatchCoreWrapper(nn.Module):
         torch.save(state, checkpoint_path)
 
     @classmethod
-    def _from_saved_model_config(cls, model_config: dict[str, Any]) -> "PatchCoreWrapper":
+    def _from_saved_model_config(cls, model_config: dict[str, Any]):
         return cls(
             backbone=str(model_config.get("backbone", "wide_resnet50_2")),
             feature_layers=list(model_config.get("feature_layers", ["layer2", "layer3"])),
@@ -378,7 +376,7 @@ class PatchCoreWrapper(nn.Module):
         path: str | Path,
         cfg: dict[str, Any] | None = None,
         device: torch.device | None = None,
-    ) -> "PatchCoreWrapper":
+    ):
         checkpoint = torch.load(path, map_location=device or "cpu")
         if cfg is not None:
             model = cls.from_config(cfg)

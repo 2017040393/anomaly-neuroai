@@ -44,7 +44,11 @@ def test_mvtec_dataset_reads_labels_and_masks(tmp_path) -> None:
     assert int(train_sample["label"].item()) == 0
     assert float(train_sample["mask"].sum().item()) == 0.0
 
-    anomaly_sample = next(sample for sample in (test_dataset[index] for index in range(len(test_dataset))) if sample["defect_type"] != "good")
+    anomaly_sample = next(
+        sample
+        for sample in (test_dataset[index] for index in range(len(test_dataset)))
+        if sample["defect_type"] != "good"
+    )
     assert int(anomaly_sample["label"].item()) == 1
     assert float(anomaly_sample["mask"].sum().item()) > 0.0
 

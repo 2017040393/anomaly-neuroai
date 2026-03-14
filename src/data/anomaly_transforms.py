@@ -17,9 +17,7 @@ def get_normalization_stats(normalization: str | None) -> tuple[tuple[float, ...
         return IMAGENET_MEAN, IMAGENET_STD
     if name in {"none", "identity"}:
         return (0.0, 0.0, 0.0), (1.0, 1.0, 1.0)
-    raise ValueError(
-        f"Unsupported normalization '{normalization}'. Expected one of ['imagenet', 'none']."
-    )
+    raise ValueError(f"Unsupported normalization '{normalization}'. Expected one of ['imagenet', 'none'].")
 
 
 def build_image_transform(
@@ -100,9 +98,7 @@ def denormalize_image_tensor(
         mean_tensor = mean_tensor.unsqueeze(0)
         std_tensor = std_tensor.unsqueeze(0)
     elif image_tensor.ndim != 3:
-        raise ValueError(
-            f"image_tensor must have shape [C,H,W] or [N,C,H,W], got {tuple(image_tensor.shape)}."
-        )
+        raise ValueError(f"image_tensor must have shape [C,H,W] or [N,C,H,W], got {tuple(image_tensor.shape)}.")
 
     denormalized = image_tensor * std_tensor + mean_tensor
     return denormalized.clamp(0.0, 1.0)

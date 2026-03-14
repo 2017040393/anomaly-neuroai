@@ -27,6 +27,4 @@ def build_model(cfg: dict[str, Any]):
             time_steps=time_steps,
         )
 
-    raise ValueError(
-        f"Unsupported model '{model_name}'. Expected one of ['mlp', 'snn_mlp']."
-    )
+    raise ValueError(f"Unsupported model '{model_name}'. Expected one of ['mlp', 'snn_mlp'].")

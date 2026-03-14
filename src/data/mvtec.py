@@ -132,8 +132,7 @@ class MVTecADDataset(Dataset[dict[str, Any]]):
         if not self.category_dir.exists():
             available = ", ".join(_list_available_categories(self.root_dir)) or "none"
             raise FileNotFoundError(
-                f"MVTec category directory not found: {self.category_dir}. "
-                f"Available categories: {available}"
+                f"MVTec category directory not found: {self.category_dir}. Available categories: {available}"
             )
 
         split_dir = self.category_dir / self.split
@@ -145,8 +144,7 @@ class MVTecADDataset(Dataset[dict[str, Any]]):
 
         if not self.samples:
             raise RuntimeError(
-                f"No image files found under {split_dir}. "
-                "Expected the standard MVTec AD directory layout."
+                f"No image files found under {split_dir}. Expected the standard MVTec AD directory layout."
             )
 
     def _discover_samples(self) -> list[MVTecSample]:
@@ -186,9 +184,7 @@ class MVTecADDataset(Dataset[dict[str, Any]]):
         if matches:
             return matches[0]
 
-        raise FileNotFoundError(
-            f"Mask file not found for image {image_path.name} in directory {mask_dir}."
-        )
+        raise FileNotFoundError(f"Mask file not found for image {image_path.name} in directory {mask_dir}.")
 
     def __len__(self) -> int:
         return len(self.samples)

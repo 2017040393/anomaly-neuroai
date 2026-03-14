@@ -7,7 +7,14 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import accuracy_score, f1_score, precision_recall_curve, precision_score, recall_score, roc_auc_score
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    precision_recall_curve,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from tqdm.auto import tqdm
 
 from src.data.anomaly_transforms import build_mvtec_transforms

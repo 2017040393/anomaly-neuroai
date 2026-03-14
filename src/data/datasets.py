@@ -39,14 +39,11 @@ class SyntheticClassificationDataset(Dataset[tuple[torch.Tensor, torch.Tensor]])
             class_centers = np.asarray(class_centers, dtype=np.float32)
             if class_centers.shape != (num_classes, num_features):
                 raise ValueError(
-                    "class_centers must have shape "
-                    f"({num_classes}, {num_features}), got {class_centers.shape}."
+                    f"class_centers must have shape ({num_classes}, {num_features}), got {class_centers.shape}."
                 )
 
         labels = rng.integers(0, num_classes, size=num_samples, dtype=np.int64)
-        noise = rng.normal(loc=0.0, scale=noise_std, size=(num_samples, num_features)).astype(
-            np.float32
-        )
+        noise = rng.normal(loc=0.0, scale=noise_std, size=(num_samples, num_features)).astype(np.float32)
         features = class_centers[labels] + noise
 
         self.features = torch.from_numpy(features.astype(np.float32))

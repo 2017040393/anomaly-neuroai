@@ -31,9 +31,7 @@ def main() -> None:
 
     checkpoint_path = resolve_checkpoint_path(cfg, args.ckpt)
     if not checkpoint_path.exists():
-        raise FileNotFoundError(
-            f"Checkpoint not found at {checkpoint_path}. Run training first or provide --ckpt."
-        )
+        raise FileNotFoundError(f"Checkpoint not found at {checkpoint_path}. Run training first or provide --ckpt.")
 
     checkpoint = torch.load(checkpoint_path, map_location=device)
     model.load_state_dict(checkpoint["model_state_dict"])
